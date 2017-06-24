@@ -2,7 +2,7 @@ version: '3'
 
 services:
   master:
-    image: itzg/elasticsearch
+    image: itzg/elasticsearch:5
     environment:
       PLUGINS: ingest-attachment
       TYPE: MASTER
@@ -13,7 +13,7 @@ services:
       update_config:
         parallelism: 1
   data:
-    image: itzg/elasticsearch
+    image: itzg/elasticsearch:5
     environment:
       PLUGINS: ingest-attachment
       TYPE: DATA
@@ -24,7 +24,7 @@ services:
         parallelism: 1
         delay: 60s
   gateway:
-    image: itzg/elasticsearch
+    image: itzg/elasticsearch:5
     ports:
       - "9200:9200"
       - "9300:9300"
@@ -33,7 +33,7 @@ services:
       TYPE: GATEWAY
       UNICAST_HOSTS: master
   ingest:
-    image: itzg/elasticsearch
+    image: itzg/elasticsearch:5
     ports:
       - "9222:9200"
     environment:
