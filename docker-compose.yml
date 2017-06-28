@@ -8,7 +8,7 @@ services:
       TYPE: MASTER
       UNICAST_HOSTS: master
       MIN_MASTERS: 1
-      ES_JAVA_OPTS: "-Xmx2g -Xms2g"
+      ES_JAVA_OPTS: "-Xmx1g -Xms1g"
     deploy:
       replicas: 1
       update_config:
@@ -19,7 +19,7 @@ services:
       PLUGINS: ingest-attachment
       TYPE: DATA
       UNICAST_HOSTS: master
-      ES_JAVA_OPTS: "-Xmx2g -Xms2g"
+      ES_JAVA_OPTS: "-Xmx1g -Xms1g"
     deploy:
       replicas: 2
       update_config:
@@ -30,11 +30,13 @@ services:
     ports:
       - "9200:9200"
       - "9300:9300"
+    volumes:
+      - ./elasticsearch/config/elasticsearch.yml:/usr/share/elasticsearch-5.4.2/config/elasticsearch.yml
     environment:
       PLUGINS: ingest-attachment
       TYPE: GATEWAY
       UNICAST_HOSTS: master
-      ES_JAVA_OPTS: "-Xmx2g -Xms2g"
+      ES_JAVA_OPTS: "-Xmx1g -Xms1g"
   ingest:
     image: itzg/elasticsearch:5
     ports:
