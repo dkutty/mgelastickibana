@@ -1,6 +1,22 @@
 version: '3'
 
 services:
+  head:
+    image: mobz/elasticsearch-head:5
+    ports:
+      - "9100:9100"
+    deploy:
+      placement:
+        constraints: [node.Role == manager]
+  viz:
+    image: dockersamples/visualizer
+    volumes:
+      - "/var/run/docker.sock:/var/run/docker.sock"
+    ports:
+      - "8080:8080"
+    deploy:
+      placement:
+        constraints: [node.Role == manager]
   master:
     image: itzg/elasticsearch:5
     environment:
