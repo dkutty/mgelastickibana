@@ -2,7 +2,7 @@ version: '3'
 
 services:
   head:
-    image: mobz/elasticsearch-head:5
+    image: mobz/elasticsearch-head
     ports:
       - "9100:9100"
     deploy:
@@ -18,7 +18,7 @@ services:
       placement:
         constraints: [node.Role == manager]
   master:
-    image: itzg/elasticsearch:5
+    image: docker.elastic.co/elasticsearch/elasticsearch:6.5.1
     environment:
       PLUGINS: ingest-attachment
       TYPE: MASTER
@@ -30,7 +30,7 @@ services:
       update_config:
         parallelism: 1
   data:
-    image: itzg/elasticsearch:5
+    image: itzg/elasticsearch:6
     environment:
       PLUGINS: ingest-attachment
       TYPE: DATA
@@ -42,19 +42,19 @@ services:
         parallelism: 1
         delay: 60s
   gateway:
-    image: itzg/elasticsearch:5
+    image: docker.elastic.co/elasticsearch/elasticsearch:6.5.1
     ports:
       - "9200:9200"
       - "9300:9300"
     volumes:
-      - ./elasticsearch/config/elasticsearch.yml:/usr/share/elasticsearch-5.4.2/config/elasticsearch.yml
+      - ./elasticsearch/config/elasticsearch.yml:/usr/share/elasticsearch/config/elasticsearch.yml
     environment:
       PLUGINS: ingest-attachment
       TYPE: GATEWAY
       UNICAST_HOSTS: master
       ES_JAVA_OPTS: "-Xmx1g -Xms1g"
   ingest:
-    image: itzg/elasticsearch:5
+    image: docker.elastic.co/elasticsearch/elasticsearch:6.5.1
     ports:
       - "9222:9200"
     environment:
