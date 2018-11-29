@@ -49,6 +49,12 @@ services:
       - cluster.name=mylocal
       - node.name={{.Node.Hostname}}-elasticsearch
       - network.host=0.0.0.0
+      - bootstrap.memory_lock=true
+      - ES_JAVA_OPTS="-Xms2g -Xmx2g"    
+      - http.cors.enabled: true
+      - http.cors.allow-origin: "*"
+      - http.cors.allow-methods: OPTIONS, HEAD, GET, POST, PUT, DELETE
+      - http.cors.allow-headers: "X-Requested-With, Content-Type, Content-Length, X-User"      
     networks:
       - elastic
     volumes:
@@ -89,4 +95,3 @@ networks:
 volumes:
   elasticsearch:
   kibana:
-  viz:
