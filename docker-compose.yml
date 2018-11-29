@@ -11,6 +11,13 @@ services:
     deploy:
       placement:
         constraints: [node.Role == manager]
+    deploy:
+      labels:
+        - com.df.notify=true
+        - com.df.distribute=true
+        - com.df.servicePath=/
+        - com.df.port=8080
+        - com.df.srcPort=8080
         
   swarm-listener:
     image: dockerflow/docker-flow-swarm-listener:latest
