@@ -2,6 +2,14 @@ version: "3.6"
 
 services:
 
+  viz:
+    image: dockersamples/visualizer
+    volumes:
+      - "/var/run/docker.sock:/var/run/docker.sock"
+    deploy:
+      placement:
+        constraints: [node.Role == manager]
+        
   swarm-listener:
     image: dockerflow/docker-flow-swarm-listener:latest
     hostname: swarm-listener
@@ -22,6 +30,7 @@ services:
     ports:
       - "80:80"
       - "9200:9200"
+      - "8080:8080"
     networks:
       - elastic
     environment:
