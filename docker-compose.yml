@@ -1,6 +1,20 @@
 version: "3.6"
 
 services:
+
+  cerebro:
+    image: yannart/cerebro:latest
+    hostname: "{{.Node.Hostname}}-cerebro"
+    networks:
+      - elastic
+    deploy:
+      labels:
+        - com.df.notify=true
+        - com.df.distribute=true
+        - com.df.servicePath=/
+        - com.df.port=9000
+        - com.df.srcPort=9000
+        
   viz:
     image: dockersamples/visualizer
     volumes:
@@ -30,13 +44,14 @@ services:
     hostname: proxy
     ports:
       - "80:80"
+      - "9000:9000"
       - "9200:9200"
     networks:
       - elastic
     environment:
       - LISTENER_ADDRESS=swarm-listener
       - MODE=swarm
-      - BIND_PORTS=9200
+      - BIND_PORTS=9200,9000
 
   elasticsearch:
     image: dkutty/elasticsearch-ingest-6.5.1:6.5.1
