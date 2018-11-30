@@ -39,12 +39,15 @@ services:
       - BIND_PORTS=9200
 
   elasticsearch:
-    image: docker.elastic.co/elasticsearch/elasticsearch:${ELASTIC_VERSION:-6.5.1}
+    image: dkutty/elasticsearch-ingest-6.5.1:6.5.1
     hostname: "{{.Node.Hostname}}-elasticsearch"
     environment:
       - discovery.zen.ping.unicast.hosts=elasticsearch
       - discovery.zen.minimum_master_nodes=1
       - xpack.security.enabled=false
+      - xpack.ml.enabled=false
+      - xpack.watcher.enabled=false
+      - xpack.graph.enabled=false
       - xpack.monitoring.collection.enabled=false
       - cluster.name=mylocal
       - node.name={{.Node.Hostname}}-elasticsearch
@@ -53,7 +56,7 @@ services:
       - http.cors.allow-origin="*"
       - http.cors.allow-methods=OPTIONS, HEAD, GET, POST, PUT, DELETE
       - http.cors.allow-headers="X-Requested-With, Content-Type, Content-Length, X-User"
-      - "ES_JAVA_OPTS=-Xms2g -Xmx2g"
+      #- "ES_JAVA_OPTS=-Xms2g -Xmx2g"
     networks:
       - elastic
     volumes:
@@ -93,4 +96,6 @@ networks:
 
 volumes:
   elasticsearch:
+    name: '{{.Service.Name}}-{{.Task.Slot}}'
+    driver: local
   kibana:
