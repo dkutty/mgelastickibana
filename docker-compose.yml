@@ -20,7 +20,7 @@ services:
     volumes:
       - "/var/run/docker.sock:/var/run/docker.sock"
     ports:
-      - "8080:8080"
+      - "${VIZ_PORT:-8080}:8080"
     deploy:
       placement:
         constraints: [node.Role == manager]
@@ -43,18 +43,18 @@ services:
     image: dockerflow/docker-flow-proxy:latest
     hostname: proxy
     ports:
-      - "80:80"
-      - "9000:9000"
-      - "9200:9200"
+      - "${KIBANA_PORT:-5601}:5601"
+      - "${CEREBRO_PORT:-9000}:9000"
+      - "${ES_PORT:-9200}:9200"
     networks:
       - elastic
     environment:
       - LISTENER_ADDRESS=swarm-listener
       - MODE=swarm
-      - BIND_PORTS=9200,9000
+      - BIND_PORTS=9200,9000,5601
 
   elasticsearch:
-    image: dkutty/elasticsearch-ingest-6.5.1:6.5.1
+    image: dkutty/elasticsearch-ingest-${ES_VERSION:-6.5.1}:${ES_VERSION:-6.5.1}
     hostname: "{{.Node.Hostname}}-elasticsearch"
     environment:
       - discovery.zen.ping.unicast.hosts=elasticsearch
@@ -64,7 +64,7 @@ services:
       - xpack.watcher.enabled=false
       - xpack.graph.enabled=false
       - xpack.monitoring.collection.enabled=false
-      - cluster.name=mylocal
+      - cluster.name=${ES_CLUSTER:-dev}
       - node.name={{.Node.Hostname}}-elasticsearch
       - network.host=0.0.0.0
       - http.cors.enabled=true
@@ -86,7 +86,7 @@ services:
         - com.df.port=9200
         - com.df.srcPort=9200
   kibana:
-    image: docker.elastic.co/kibana/kibana:${ELASTIC_VERSION:-6.5.1}
+    image: docker.elastic.co/kibana/kibana:${ES_VERSION:-6.5.1}
     hostname: "{{.Node.Hostname}}-kibana"
     environment:
       - ELASTICSEARCH_URL=http://elasticsearch:9200
@@ -103,7 +103,7 @@ services:
         - com.df.distribute=true
         - com.df.servicePath=/
         - com.df.port=5601
-        - com.df.srcPort=80
+        - com.df.srcPort=5601
 
 networks:
     elastic:
