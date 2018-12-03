@@ -20,11 +20,11 @@ case $yno in
 
         [yY] | [yY][Ee][Ss] )
                 docker network create --driver overlay elastic
-                VIZ_PORT="${VIZ_PORT}" CEREBRO_PORT="${CEREBRO_PORT}" ES_PORT="${ES_PORT}" KIBANA_PORT="${KIBANA_PORT}" "ES_VERSION="${ES_VERSION}" ES_CLUSTER="${ES_CLUSTER}" docker stack deploy -c docker-compose.yml elastic
+                VIZ_PORT="${VIZ_PORT}" CEREBRO_PORT="${CEREBRO_PORT}" ES_PORT="${ES_PORT}" KIBANA_PORT="${KIBANA_PORT}" ES_VERSION="${ES_VERSION}" ES_CLUSTER="${ES_CLUSTER}" docker stack deploy -c docker-compose.yml elastic
                 ;;
 
         [nN] | [n|N][O|o] )
-                echo "Not agreed, you can't proceed the installation";
+                echo "Not agreed, you cannot proceed the installation";
                 exit 1
                 ;;
         *) echo "Invalid input"
